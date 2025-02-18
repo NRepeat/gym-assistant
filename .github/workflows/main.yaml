@@ -1,14 +1,17 @@
-name: ci-cd pipeline deploy to prod
+name: CI-CD Pipeline Deploy to Prod
 
 on:
   push:
-    branches: [ main ]
+    branches:
+      - main
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    environment: gym-app-env # Environment name
+    environment: gym-app-env  # Environment name
+
     steps:
-    - name: Get Github action IP
+    - name: Get Github Actions IP
       id: ip
       uses: haythem/public-ip@v1.2
 
@@ -17,31 +20,30 @@ jobs:
 
     - name: Add Github Actions IP to Security group
       run: |
-        aws ec2 authorize-security-group-ingress --group-id ${{ secrets.AWS_SG_NAME }} --protocol tcp --port 22 --cidr ${{ steps.ip.outputs.ipv4 }}/32    
+        aws ec2 authorize-security-group-ingress --group-id ${{ secrets.AWS_SG_NAME }} --protocol tcp --port 22 --cidr ${{ steps.ip.outputs.ipv4 }}/32
       env:
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY}}
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
-        
+
     - name: Deploy to prod server
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.HOST_IP }}
-        username: ubuntu
-        key: ${{ secrets.SSH_KEY }}
-        script: |
-          # export NVM_DIR=~/.nvm
-          # source ~/.nvm/nvm.sh
+      run: |
+        # SSH into your EC2 instance and perform the deploy steps
+        ssh -i ${{ secrets.SSH_KEY }} ec2-user@${{ secrets.HOST_IP }} << 'EOF'
           cd /home/ec2-user/app/gym-assistant
           git stash
           git pull origin main
+          # Uncomment these lines if you need to install dependencies or build
           # npm install
           # npm run build
-          
-              
-    - name: Remove Github Actions IP from security group
+        EOF
+      env:
+        AWS_SSH_KEY: ${{ secrets.SSH_KEY }}  # SSH private key for EC2
+        AWS_EC2_PUBLIC_IP: ${{ secrets.HOST_IP }}  # Public IP of your EC2 instance
+
+    - name: Remove Github Actions IP from Security group
       run: |
-        aws ec2 revoke-security-group-ingress --group-name ${{ secrets.AWS_SG_NAME }} --protocol tcp --port 22 --cidr ${{ steps.ip.outputs.ipv4 }}/32
+        aws ec2 revoke-security-group-ingress --group-id ${{ secrets.AWS_SG_NAME }} --protocol tcp --port 22 --cidr ${{ steps.ip.outputs.ipv4 }}/32
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
