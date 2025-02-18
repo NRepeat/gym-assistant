@@ -30,7 +30,7 @@ jobs:
       run: |
         echo "${{ secrets.SSH_KEY }}" > /tmp/aws_ssh_key.pem
         chmod 600 /tmp/aws_ssh_key.pem
-        ssh -i /tmp/aws_ssh_key.pem ec2-user@${{ secrets.HOST_IP }} << 'EOF'
+        ssh  -o StrictHostKeyChecking=no -i /tmp/aws_ssh_key.pem ec2-user@${{ secrets.HOST_IP }} << 'EOF'
           cd /home/ec2-user/app/gym-assistant
           git stash
           git pull origin main
