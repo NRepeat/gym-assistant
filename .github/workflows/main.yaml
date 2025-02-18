@@ -6,6 +6,7 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    environment: gym-app-env # Environment name
     steps:
     - name: Get Github action IP
       id: ip
