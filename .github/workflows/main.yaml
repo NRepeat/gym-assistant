@@ -35,8 +35,12 @@ jobs:
           git stash
           git pull origin main
         # Uncomment these lines if you need to install dependencies or build
-        # npm install
-        # npm run build
+        docker build -t gym-table .
+        docker stop gym-table || true
+        docker rm gym-table || true
+        docker run -d --name gym-table -p 3000:3000 gym-table
+        
+        
         EOF
       env:
         AWS_SSH_KEY: ${{ secrets.SSH_KEY }}  # SSH private key for EC2

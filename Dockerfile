@@ -25,4 +25,4 @@ COPY /app/assets	/app/assets
 WORKDIR /app
 
 # ✅ Запуск миграции и seed при старте контейнера
-CMD npx prisma db push && npm run start
+CMD npm run start
