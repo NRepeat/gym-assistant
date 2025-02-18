@@ -1,4 +1,4 @@
-import { PrismaClient, type ZoneCard } from '@prisma/client';
+import { PrismaClient} from '@prisma/client';
 
 const prisma = new PrismaClient();
 
@@ -6,10 +6,10 @@ async function main() {
 	// Define your seed data
 	const cartData = [
 		{
-			title: "Leg",
-			description: "",
+			title: "Exercises",
+			description: "Exercises list",
 			image: "/app/assets/images/3.jpg",
-			link: '/legs'
+			link: '/muscle/list'
 		},
 		{
 			title: "Chest",

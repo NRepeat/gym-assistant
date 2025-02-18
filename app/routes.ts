@@ -8,6 +8,7 @@ export default [
 		route('/workout/muscle/:muscleId/list', 'routes/muscle-exercise-list.tsx'),
 		route("/workout/muscle/:muscleId/list/exercise/:exerciseId", "routes/exercise.tsx",),
 	]),
+	route('/automator/register', 'routes/register.ts'),
 	...prefix('api', [
 		route("/assets/images/:slug", "routes/api/recourse/images-recourse.ts"),
 

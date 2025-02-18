@@ -1,8 +1,6 @@
 import { type FC } from 'react'
-import ZoneCard, { type ZoneCardProps } from '../shared/ZoneCard'
+import ZoneCard from '../shared/ZoneCard'
 import type { MuscleType } from '~/shared/types'
-import { Link } from 'react-router'
-import { ChevronLeft } from 'lucide-react'
 
 export type GymTableProps = {
 	zoneCardsData: MuscleType[]

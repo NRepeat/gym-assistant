@@ -8,7 +8,8 @@ export async function loader({ request }: Route.LoaderArgs) {
 	if (!imageName) {
 		return new Response("Image not found", { status: 404 });
 	}
-	const imagePath = path.join(process.cwd(), "/app/assets/images", imageName);
+	const imagePath = path.join(process.cwd(), process.env.NODE_ENV! === 'production' ? '/assets/images' : '/app/assets/images', imageName);
+	console.log('imagePath', imagePath)
 	try {
 		const imageBuffer = await fs.readFile(imagePath);
 

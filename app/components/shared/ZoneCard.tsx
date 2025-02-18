@@ -1,4 +1,4 @@
-import React, { type FC } from 'react'
+import { type FC } from 'react'
 import { Card, CardContent, CardFooter, CardHeader } from '../ui/card'
 import { Link } from 'react-router'
 import type { MuscleType } from '~/shared/types'

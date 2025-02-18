@@ -1,5 +1,4 @@
-import React, { type FC } from 'react'
-import type { GymTableProps } from '~/components/GymTable/GymTable'
+import { type FC } from 'react'
 import { Skeleton } from '~/components/ui/skeleton'
 
 const MainPageSkeleton: FC<{ cards: number[] }> = ({ cards }) => {

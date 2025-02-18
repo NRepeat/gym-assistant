@@ -9,7 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "~/components/ui/accordion";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "~/components/ui/carousel";
 import { Link } from "react-router";
-import { ChevronDown, ChevronLeft } from "lucide-react";
+import { ChevronLeft } from "lucide-react";
 
 export async function loader({ request, params, }: Route.LoaderArgs) {
 
@@ -27,7 +27,6 @@ export async function loader({ request, params, }: Route.LoaderArgs) {
 const Exercise = ({ loaderData }: Route.ComponentProps) => {
 	const { listId } = loaderData
 	const exercise = loaderData.exercise
-	console.log('exercise', exercise)
 	const variants = exercise.results.exercises
 	const [defaultVariant, setDefaultVariant] = useState<ExerciseType>(variants[0])
 	const [exerciseVideos, setExerciseVideos] = useState<VideoType[]>(exercise.results.videos)

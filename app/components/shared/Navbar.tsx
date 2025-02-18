@@ -1,4 +1,3 @@
-import React from 'react'
 import ToggleThemeButton from './ToggleThemeButton'
 import { Link } from 'react-router'
 

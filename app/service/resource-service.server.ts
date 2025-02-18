@@ -1,7 +1,7 @@
 export class ResourceService {
 	static async getImage(path: string) {
 		try {
-			const data = await fetch(`http://localhost:5173/api/assets/images/${path}`);
+			const data = await fetch(`http://localhost:3000/api/assets/images/${path}`);
 			if (!data.ok) {
 				throw new Error("Image not found");
 			}

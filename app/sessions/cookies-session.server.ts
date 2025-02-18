@@ -8,7 +8,7 @@ type SessionData = {
 type SessionFlashData = {
 	error: string;
 };
-console.log(process.env.NODE_ENV)
+
 
 const { getSession, commitSession, destroySession } =
 	createCookieSessionStorage<SessionData, SessionFlashData>(
