@@ -13,7 +13,6 @@ COPY . /app/
 COPY --from=development-dependencies-env /app/node_modules /app/node_modules
 WORKDIR /app
 RUN npm run build
-RUN npx prisma generate  # ✅ Генерация клиента
 
 FROM node:20-alpine
 COPY ./package.json package-lock.json /app/
@@ -25,4 +24,4 @@ COPY /app/assets	/app/assets
 WORKDIR /app
 
 # ✅ Запуск миграции и seed при старте контейнера
-CMD npm run start
+CMD npx prisma generate && npm run start
