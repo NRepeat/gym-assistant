@@ -22,7 +22,7 @@ jobs:
       run: |
         aws ec2 authorize-security-group-ingress --group-id ${{ secrets.AWS_SG_NAME }} --protocol tcp --port 22 --cidr ${{ steps.ip.outputs.ipv4 }}/32
       env:
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
+        AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION}}
 
@@ -38,14 +38,14 @@ jobs:
           # npm run build
         EOF
       env:
-        AWS_SSH_KEY: ${{ secrets.SSH_KEY }}  # SSH private key for EC2
-        AWS_EC2_PUBLIC_IP: ${{ secrets.HOST_IP }}  # Public IP of your EC2 instance
+        SSH_KEY: ${{ secrets.SSH_KEY }}  # SSH private key for EC2
+        HOST_IP: ${{ secrets.HOST_IP }}  # Public IP of your EC2 instance
 
     - name: Remove Github Actions IP from Security group
       run: |
         aws ec2 revoke-security-group-ingress --group-id ${{ secrets.AWS_SG_NAME }} --protocol tcp --port 22 --cidr ${{ steps.ip.outputs.ipv4 }}/32
       env:
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
+        AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
       if: always()
