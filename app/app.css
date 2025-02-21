@@ -19,6 +19,15 @@ body {
 }
 
 :root {
+  --admin-layout-background: hsl(210, 20%, 96%);
+  --admin-background: #FFFFFF;
+  --admin-foreground: #1E1E2C;
+  --admin-primary: #F19F66;
+  --admin-secondary: #1E1E2C;
+  --admin-support-1: #3B8FF2;
+  --admin-support-2: #33B1AB;
+  --admin-support-3: #E0B40F;
+  --background: hsl(0, 2%, 10%);
   --background: hsl(0, 0%, 95%);
   --foreground: hsl(20 14.3% 4.1%);
   --card: hsl(0, 0%, 95%);
@@ -44,10 +53,28 @@ body {
   --chart-4: hsl(43 74% 66%);
   --chart-5: hsl(27 87% 67%);
   --radius: 0.6rem;
+  --sidebar: hsl(0 0% 98%);
+  --sidebar-foreground: hsl(240 5.3% 26.1%);
+  --sidebar-primary: hsl(240 5.9% 10%);
+  --sidebar-primary-foreground: hsl(0 0% 98%);
+  --sidebar-accent: hsl(240 4.8% 95.9%);
+  --sidebar-accent-foreground: hsl(240 5.9% 10%);
+  --sidebar-border: hsl(220 13% 91%);
+  --sidebar-ring: hsl(217.2 91.2% 59.8%);
 }
 
 .dark {
-  --background: hsl(0, 2%, 11%);
+  --admin-layout-background: #0c0f0d;
+  --admin-background: hsl(240, 3%, 12%);
+  --admin-foreground: hsl(0, 0%, 9%);
+  --admin-primary: #F19F66;
+  --admin-primary-muted: #6a4225;
+  --admin-secondary: #1E1E2C;
+  --admin-support-1: #3B8FF2;
+  --admin-support-2: #1c6b41;
+  --admin-support-3: #E0B40F;
+  --admin-sm-radius:2px;
+  --background: hsl(0, 2%, 10%);
   --foreground: hsl(0, 0%, 89%);
   --card: hsl(0, 3%, 13%);
   --card-foreground: hsl(60 9.1% 97.8%);
@@ -58,7 +85,7 @@ body {
   --secondary: hsl(12 6.5% 15.1%);
   --secondary-foreground: hsl(60 9.1% 97.8%);
   --muted: hsl(12 6.5% 15.1%);
-  --muted-foreground: hsl(24 5.4% 63.9%);
+  --muted-foreground: #879a90;
   --accent: hsl(12 6.5% 15.1%);
   --accent-foreground: hsl(60 9.1% 97.8%);
   --destructive: hsl(0 62.8% 30.6%);
@@ -71,9 +98,27 @@ body {
   --chart-3: hsl(30 80% 55%);
   --chart-4: hsl(280 65% 60%);
   --chart-5: hsl(340 75% 55%);
+  --sidebar: hsl(240 5.9% 10%);
+  --sidebar-foreground: hsl(240 4.8% 95.9%);
+  --sidebar-primary: hsl(224.3 76.3% 48%);
+  --sidebar-primary-foreground: hsl(0 0% 100%);
+  --sidebar-accent: hsl(240 3.7% 15.9%);
+  --sidebar-accent-foreground: hsl(240 4.8% 95.9%);
+  --sidebar-border: hsl(240 3.7% 15.9%);
+  --sidebar-ring: hsl(217.2 91.2% 59.8%);
 }
 
 @theme inline {
+  --radius-admin:var(--admin-sm-radius);
+  --color-admin-background: var(--admin-background);
+  --color-admin-foreground: var(--admin-foreground);
+  --color-admin-primary: var(--admin-primary);
+  --color-admin-primary-muted: var(--admin-primary-muted);
+  --color-admin-secondary: var(--admin-secondary);
+  --color-admin-support-1: var(--admin-support-1);
+  --color-admin-support-2: var(--admin-support-2);
+  --color-admin-support-3: var(--admin-support-3);
+  --color-admin-layout-background: var(--admin-layout-background);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -102,7 +147,14 @@ body {
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
-
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
 
 }
 
@@ -164,7 +216,7 @@ body {
 		height: var(--radix-accordion-content-height);
 	}
 }
- 
+
 @keyframes slideUp {
 	from {
 		height: var(--radix-accordion-content-height);
@@ -187,7 +239,7 @@ body {
   40%{
     transform:translate(-15%,-20%)
   }
-  
+
   50%{
     transform:translate(-5%,-10%)
   }
@@ -206,5 +258,5 @@ body {
   100%{
     transform:translate(-15%,-20%)
   }
- 
+
 }

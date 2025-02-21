@@ -1,7 +1,6 @@
 import { type FC } from 'react'
 import { data, Outlet, useNavigation, } from 'react-router'
 import Navbar from '../shared/Navbar'
-import type { Route } from './+types/Main'
 import { motion } from "framer-motion";
 import { LoaderCircleIcon } from 'lucide-react';
 import { commitSession, getSession } from '~/sessions/cookies-session.server';
