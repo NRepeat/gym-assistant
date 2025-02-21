@@ -1,3 +1,5 @@
+import type { Movement, Opens } from "@prisma/client"
+
 export type MuscleType = {
 	id: number,
 	name: string,
@@ -170,4 +172,17 @@ export type VideoType = {
 	"license_author_url": string,
 	"license_derivative_source_url": string,
 	"author_history": string[]
+}
+export type OpensWithMovement = Opens & { movement: Movement[] };
+
+export type OpenWorkout = {
+	id: number;
+	year: number;
+	open: number;
+	workout: object;
+	pdf: string;
+	description: object;
+	thumbnails: string[];
+	createdAt: Date;
+	updatedAt: Date;
 }

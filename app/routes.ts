@@ -12,10 +12,18 @@ export default [
 	...prefix('admin', [
 		layout('./components/layouts/Admin.tsx', [
 			index("routes/admin/home.tsx"),
+			route('/workouts', 'routes/admin/workouts.tsx', [
+				route('workout/:workout', 'routes/admin/workout.tsx'),
+			]),
+			// route('/workouts/edit', 'routes/admin/workout-edit.tsx'),
+
 		])]),
 	...prefix('api', [
-		route("/assets/images/:slug", "routes/api/recourse/images-recourse.ts"),
+		route("assets/images/:slug", "routes/api/recourse/images-recourse.ts"),
 
+		...prefix('admin', [
+			route('workouts/workout/:workout', 'routes/api/admin/workouts.ts'),
+		]),
 		...prefix('theme', [
 			route('change', 'routes/api/theme/change.ts')
 		])

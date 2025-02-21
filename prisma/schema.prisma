@@ -9,16 +9,71 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-model ZoneCard {
+model WorkoutData {
+  id Int @id @default(autoincrement())
+
+  day       String   @unique
+  month     Int
+  year      Int
+  image     String?
+  data      Json
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Heroes {
+  id          Int        @id @default(autoincrement())
+  name        String
+  description Json
+  workout     Json
+  movement    Movement[] @relation("HeroMovements")
+  image       String[]
+  thumbnails  String[]
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+}
+
+model Opens {
+  id          Int        @id @default(autoincrement())
+  year        Int
+  open        Int
+  workout     Json
+  pdf         String
+  description Json
+  thumbnails  String[]
+  movement    Movement[] @relation("OpenMovements")
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+}
+
+model Semifinals {
+  id          Int        @id @default(autoincrement())
+  year        Int
+  semifinal   Int
+  workout     Json
+  pdf         String
+  description Json
+  thumbnails  String[]
+  movement    Movement[] @relation("SemifinalMovements")
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+}
+
+model Movement {
   id          Int      @id @default(autoincrement())
-  title       String   @unique
-  image       String
+  name        String   @unique
   description String
-  link        String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  year        Int?
+  workout     Int?
+  image       String[]
+
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+  heroes     Heroes[]     @relation("HeroMovements")
+  opens      Opens[]      @relation("OpenMovements")
+  semifinals Semifinals[] @relation("SemifinalMovements")
 }

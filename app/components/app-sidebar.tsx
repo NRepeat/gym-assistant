@@ -5,6 +5,7 @@ import {
   ChartBarDecreasing,
   Command,
   Database,
+  Dumbbell,
   Edit,
   Frame,
   Image,
@@ -34,24 +35,31 @@ const data = {
   user: {
     name: "shadcn",
     email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
+    avatar: "",
   },
   navMain: [
     {
       title: "Workouts",
-      url: "#",
-      icon: Edit,
+      url: "/admin/workouts",
+      icon: Dumbbell,
       isActive: true,
       items: [
         {
-          title: "Edit",
-          url: "/admin/workouts/edit",
+          title: "Opens",
+          url: "/admin/workouts/workout/opens",
         },
         {
-          title: "Create",
-          url: "admin/workouts/create",
+          title: "Heroes",
+          url: "/admin/workouts/workout/heroes",
         },
-
+        {
+          title: "Semifinals",
+          url: "/admin/workouts/workout/semifinals",
+        },
+        {
+          title: 'Workout',
+          url: '/admin/workouts/workout/workout',
+        }
       ],
     },
     {
