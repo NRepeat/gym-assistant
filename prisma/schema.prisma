@@ -77,3 +77,91 @@ model Movement {
   opens      Opens[]      @relation("OpenMovements")
   semifinals Semifinals[] @relation("SemifinalMovements")
 }
+
+model User {
+  id        Int              @id @default(autoincrement())
+  name      String
+  email     String           @unique
+  password  String
+  wods      Wod[]
+  sessions  WorkoutSession[]
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+}
+
+// model UserSession {
+//   id        Int      @id @default(autoincrement())
+//   session   String
+//   user      User?
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt
+// }
+
+model WorkoutSession {
+  id        Int      @id @default(autoincrement())
+  timeCap   Int?
+  rounds    Int?
+  wod       Wod      @relation(fields: [wodId], references: [id])
+  wodId     Int
+  schedule  DateTime
+  date      DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  User      User?    @relation(fields: [userId], references: [id])
+  userId    Int?
+}
+
+model Wod {
+  id             Int              @id @default(autoincrement())
+  type           WodType          @relation(fields: [typeId], references: [id])
+  typeId         Int
+  description    String
+  createdByUser  Boolean
+  timeCap        Int?
+  rounds         Int?
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  movement       WodMovement[]
+  user           User?            @relation(fields: [userId], references: [id])
+  userId         Int
+  workoutSession WorkoutSession[]
+}
+
+model WodType {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique
+  description String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  wod         Wod[]
+}
+
+model WodMovement {
+  id          Int                 @id @default(autoincrement())
+  description String?
+  reps        Int?
+  movementId  Int
+  movement    WodMovementBaseInfo @relation(fields: [movementId], references: [id])
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime            @updatedAt
+  wod         Wod[]
+}
+
+model WodMovementBaseInfo {
+  id          Int            @id @default(autoincrement())
+  name        String         @unique
+  description String
+  equipment   WodEquipment[]
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+  wodMovement WodMovement[]
+}
+
+model WodEquipment {
+  id                  Int                   @id @default(autoincrement())
+  name                String                @unique
+  description         String
+  createdAt           DateTime              @default(now())
+  updatedAt           DateTime              @updatedAt
+  WodMovementBaseInfo WodMovementBaseInfo[]
+}

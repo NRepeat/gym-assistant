@@ -18,10 +18,10 @@ export const getSemifinalsWorkout = (id: number) => {
 		include: { movement: { select: { name: true, id: true } } }
 	});
 }
-export const getOpensWorkouts = async (url: string) => {
+export const getOpensWorkouts = async () => {
 	try {
 		const openRepo = new OpenRepo();
-		const data = await openRepo.getAllOpens({ limit: 10, offset: 0 });
+		const data = await openRepo.getAllOpens({ limit: 100, offset: 0 });
 		return data
 
 	} catch (error) {

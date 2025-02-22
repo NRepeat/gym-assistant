@@ -23,6 +23,7 @@ export async function loader({ params }: Route.LoaderArgs) {
 }
 
 const WorkoutEdit = ({ loaderData }: Route.ComponentProps) => {
+	console.log('loaderData', loaderData)
 
 	return (
 		<div className="container">

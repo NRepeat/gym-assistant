@@ -39,14 +39,14 @@ export function DataTable<TData, TValue>({
 		navigate(`/admin/data/workout/${workout}/${row}/edit`);
 	};
 	return (
-		<div className="rounded-md border">
-			<Table>
-				<TableHeader>
+		<div >
+			<Table >
+				<TableHeader className="s">
 					{table.getHeaderGroups().map((headerGroup) => (
 						<TableRow key={headerGroup.id}>
 							{headerGroup.headers.map((header) => {
 								return (
-									<TableHead key={header.id}>
+									<TableHead key={header.id} className="">
 										{header.isPlaceholder
 											? null
 											: flexRender(
@@ -59,7 +59,7 @@ export function DataTable<TData, TValue>({
 						</TableRow>
 					))}
 				</TableHeader>
-				<TableBody>
+				<TableBody className="">
 					{table.getRowModel().rows?.length ? (
 						table.getRowModel().rows.map((row) => (
 							<TableRow

@@ -1,10 +1,10 @@
 import React from 'react'
-import type { Route } from './+types/workout'
 import type { OpenWorkout } from '~/shared/types';
 import { createColumnHelper, type ColumnDef } from "@tanstack/react-table"
 import { DataTable } from '~/components/data-table';
 import OpenRepo from '~/service/repository/opens-repo';
 import { getOpensWorkouts, getSemifinalsWorkouts } from '~/api/admin/workouts-api';
+import type { Route } from './+types/workout-table';
 // import { getHeroesWorkouts, getOpensWorkouts, getSemifinalsWorkouts, getWorkoutsWorkouts } from '~/api/admin/workouts-api';
 
 type WorkoutType = {
@@ -13,32 +13,10 @@ type WorkoutType = {
 
 export async function loader({ params, request }: Route.LoaderArgs) {
 	try {
-		const url = new URL(request.url);
-		const endpoint = `/api/admin/workouts/workout/${params.workout}?offset=0&limit=10`;
-		const fullUrl = url.origin + endpoint;
-		const workoutsGetFunctions = {
-			// 'workout': getWorkoutsWorkouts,
-			'opens': getOpensWorkouts,
-			// 'heroes': getHeroesWorkouts,
-			'semifinals': getSemifinalsWorkouts,
-		}
-		const data = await workoutsGetFunctions[params.workout as keyof typeof workoutsGetFunctions](fullUrl);
 
-		const serializedData = data.flatMap((workout) => {
-			return {
-				id: workout.id,
-				year: workout.year,
-				workout: workout!.workout ? workout!.workout : '',
-				description: workout.description ? workout.description : '',
-				open: workout?.open ? workout.open : '',
-				movement: workout.movement ? workout.movement.flatMap(m => m.id).join(', ') : '',
-				createdAt: new Date(workout.createdAt).toLocaleString(),
-				updatedAt: new Date(workout.updatedAt).toLocaleString(),
-				thumbnail: workout.thumbnails ? workout.thumbnails.length : '',
-				pdf: workout.pdf ? workout.pdf : ''
-			}
-		})
-		return { serializedData }
+
+		const data = await getOpensWorkouts();
+		return { serializedData: data }
 	} catch (error) {
 		console.error('Workout loader error', error);
 		throw new Response("Workout loader error", { status: 500 });
@@ -47,7 +25,6 @@ export async function loader({ params, request }: Route.LoaderArgs) {
 
 const Workout = ({ loaderData, params }: Route.ComponentProps) => {
 	const columnHelper = createColumnHelper<typeof loaderData.serializedData>()
-
 	const columns = [
 		columnHelper.accessor('id', { header: 'ID' }),
 		columnHelper.accessor('year', {
@@ -76,11 +53,8 @@ const Workout = ({ loaderData, params }: Route.ComponentProps) => {
 		columnHelper.accessor('pdf', { header: 'PDF' }),
 	]
 	return (
-		<div>
-			<div className="container mx-auto ">
-				<DataTable columns={columns} data={loaderData.serializedData} workout={params.workout} />
-			</div>
-		</div>
+
+		<DataTable columns={columns} data={loaderData.serializedData} workout={params.workout} />
 	)
 }
 

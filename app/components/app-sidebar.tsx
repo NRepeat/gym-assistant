@@ -128,6 +128,10 @@ const data = {
         {
           title: 'Workout',
           url: '/admin/data/workout/workout',
+        },
+        {
+          title: 'Movement',
+          url: '/admin/data/workout/movement',
         }
       ],
     },
@@ -160,6 +164,7 @@ const data = {
       url: "#",
       icon: Database,
     },
+
 
 
   ],
