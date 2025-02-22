@@ -109,7 +109,7 @@ const data = {
   navMainSecondary: [
     {
       title: "Database",
-      url: "/admin/database",
+      url: "/admin/data",
       icon: Database,
       isActive: false,
       items: [

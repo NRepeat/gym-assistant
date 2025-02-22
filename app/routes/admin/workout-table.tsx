@@ -77,7 +77,7 @@ const Workout = ({ loaderData, params }: Route.ComponentProps) => {
 	]
 	return (
 		<div>
-			<div className="container mx-auto py-10">
+			<div className="container mx-auto ">
 				<DataTable columns={columns} data={loaderData.serializedData} workout={params.workout} />
 			</div>
 		</div>
