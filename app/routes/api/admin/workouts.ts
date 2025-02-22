@@ -1,5 +1,5 @@
 import { getWorkouts } from "~/api/admin/workouts-api";
-import prisma from "~/service/prisma/client.server";
+import prisma from "~/service/prisma/client";
 import type { Route } from "../../api/admin/+types/workouts";
 
 export async function loader({ request, params }: Route.LoaderArgs) {

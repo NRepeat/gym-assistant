@@ -1,6 +1,5 @@
 import type { Movement, Opens } from "@prisma/client";
-import prisma from "../prisma/client.server";
-import type { P } from "node_modules/framer-motion/dist/types.d-6pKw1mTI";
+import prisma from "../prisma/client";
 import type { OpensWithMovement } from "~/shared/types";
 
 

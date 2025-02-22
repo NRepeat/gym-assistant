@@ -46,19 +46,19 @@ const data = {
       items: [
         {
           title: "Opens",
-          url: "/admin/workouts/workout/opens",
+          url: "/admin/workout/opens",
         },
         {
           title: "Heroes",
-          url: "/admin/workouts/workout/heroes",
+          url: "/admin/workout/heroes",
         },
         {
           title: "Semifinals",
-          url: "/admin/workouts/workout/semifinals",
+          url: "/admin/workout/semifinals",
         },
         {
           title: 'Workout',
-          url: '/admin/workouts/workout/workout',
+          url: '/admin/workout/workout',
         }
       ],
     },
@@ -67,14 +67,7 @@ const data = {
       url: "#",
       icon: Image,
       items: [
-        {
-          title: "Edit",
-          url: "#",
-        },
-        {
-          title: "Upload",
-          url: "#",
-        },
+
       ],
     },
     {
@@ -112,6 +105,34 @@ const data = {
 
       ],
     },
+  ],
+  navMainSecondary: [
+    {
+      title: "Database",
+      url: "/admin/database",
+      icon: Database,
+      isActive: false,
+      items: [
+        {
+          title: "Opens",
+          url: "/admin/data/workout/opens",
+        },
+        {
+          title: "Heroes",
+          url: "/admin/data/workout/heroes",
+        },
+        {
+          title: "Semifinals",
+          url: "/admin/data/workout/semifinals",
+        },
+        {
+          title: 'Workout',
+          url: '/admin/data/workout/workout',
+        }
+      ],
+    },
+
+
   ],
   navSecondary: [
     {
@@ -158,8 +179,8 @@ export function AppSidebar({ className, ...props }: React.ComponentProps<typeof 
         </SidebarMenu>
       </SidebarHeader> */}
       <SidebarContent className={className}>
-        <NavMain items={data.navMain} />
-        <NavProjects projects={data.rawData} title="Data" />
+        <NavMain items={data.navMain} title="" />
+        <NavMain items={data.navMainSecondary} title="Data" />
         <NavProjects projects={data.analytics} title="Statistics" />
         <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>

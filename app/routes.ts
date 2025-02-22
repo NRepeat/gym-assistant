@@ -12,9 +12,10 @@ export default [
 	...prefix('admin', [
 		layout('./components/layouts/Admin.tsx', [
 			index("routes/admin/home.tsx"),
-			route('/workouts', 'routes/admin/workouts.tsx', [
-				route('workout/:workout', 'routes/admin/workout.tsx'),
-			]),
+			route('workouts', 'routes/admin/workouts.tsx'),
+			route('data/workout/:workout', 'routes/admin/workout-table.tsx'),
+			route('data/workout/:workout/:id/edit', 'routes/admin/workout-edit.tsx'),
+
 			// route('/workouts/edit', 'routes/admin/workout-edit.tsx'),
 
 		])]),

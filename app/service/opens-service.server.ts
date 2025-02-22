@@ -1,6 +1,6 @@
 import { convertJsonToMarkdown } from "~/lib/convertToMarkdown"
-import prisma from "./prisma/client.server"
-import OpenRepo from "./repository/opens-repo.server"
+import prisma from "./prisma/client"
+import OpenRepo from "./repository/opens-repo"
 import type { OpensWithMovement } from "~/shared/types";
 import type { WorkoutData } from "@prisma/client";
 type ContentBlock = { type: string; content: string };

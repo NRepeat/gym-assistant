@@ -15,22 +15,29 @@ import {
 	TableHeader,
 	TableRow,
 } from "./ui/table"
+import { useNavigate, useNavigation, useResolvedPath } from "react-router"
 
 interface DataTableProps<TData, TValue> {
 	columns: ColumnDef<TData, TValue>[]
 	data: TData[]
+	workout?: string
 }
 
 export function DataTable<TData, TValue>({
 	columns,
 	data,
+	workout
 }: DataTableProps<TData, TValue>) {
 	const table = useReactTable({
 		data,
 		columns,
 		getCoreRowModel: getCoreRowModel(),
 	})
-
+	const navigate = useNavigate();
+	const path = useNavigation()
+	const handleRowClick = (row: any) => {
+		navigate(`/admin/data/workout/${workout}/${row}/edit`);
+	};
 	return (
 		<div className="rounded-md border">
 			<Table>
@@ -57,10 +64,11 @@ export function DataTable<TData, TValue>({
 						table.getRowModel().rows.map((row) => (
 							<TableRow
 								key={row.id}
+								onClick={() => handleRowClick(row.getValue('id'))}
 								data-state={row.getIsSelected() && "selected"}
 							>
 								{row.getVisibleCells().map((cell) => (
-									<TableCell key={cell.id}>
+									<TableCell key={cell.id} >
 										{flexRender(cell.column.columnDef.cell, cell.getContext())}
 									</TableCell>
 								))}

@@ -1,0 +1,17 @@
+.w-md-editor-toolbar  {
+	height: 4rem !important;
+}
+.w-md-editor{
+}
+.w-md-editor-toolbar li > button	{
+	width: 2rem !important;
+	height: 2rem !important;
+}
+.w-md-editor-toolbar li.active > button	{
+	width: 2rem !important;
+	height: 2rem !important;
+}
+.w-md-editor-toolbar li > button >svg	{
+	width: 1.5rem !important;
+	height: 1.5rem !important;
+}
