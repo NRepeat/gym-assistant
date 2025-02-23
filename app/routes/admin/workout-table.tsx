@@ -5,6 +5,8 @@ import { DataTable } from '~/components/data-table';
 import OpenRepo from '~/service/repository/opens-repo';
 import { getOpensWorkouts, getSemifinalsWorkouts } from '~/api/admin/workouts-api';
 import type { Route } from './+types/workout-table';
+
+import prisma from '~/service/prisma/client';
 // import { getHeroesWorkouts, getOpensWorkouts, getSemifinalsWorkouts, getWorkoutsWorkouts } from '~/api/admin/workouts-api';
 
 type WorkoutType = {
@@ -16,6 +18,12 @@ export async function loader({ params, request }: Route.LoaderArgs) {
 
 
 		const data = await getOpensWorkouts();
+		// const data = await prisma.workoutData.findMany({ take: 500, skip: 1000 })
+		// const content = await updateToMarkdown(data)
+		// console.log('content', content)
+
+
+
 		return { serializedData: data }
 	} catch (error) {
 		console.error('Workout loader error', error);

@@ -114,25 +114,22 @@ const data = {
       isActive: false,
       items: [
         {
-          title: "Opens",
-          url: "/admin/data/workout/opens",
+          title: "Amrap",
+          url: "/admin/data/workouts/amrap",
         },
         {
           title: "Heroes",
-          url: "/admin/data/workout/heroes",
+          url: "/admin/data/workouts/emom",
         },
         {
           title: "Semifinals",
-          url: "/admin/data/workout/semifinals",
+          url: "/admin/data/workouts/tabata",
         },
         {
           title: 'Workout',
-          url: '/admin/data/workout/workout',
+          url: '/admin/data/workouts/FOR-TIME',
         },
-        {
-          title: 'Movement',
-          url: '/admin/data/workout/movement',
-        }
+
       ],
     },
 

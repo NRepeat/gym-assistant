@@ -6,7 +6,7 @@ import {
 	route,
 } from "@react-router/dev/routes";
 
-// to do - add crud for all wod tables  / create edit ui for all tables / create show ui for all tables
+// to do - add crud api for all wod tables  / create edit ui for all tables / create show ui for all tables
 
 export default [
 	// layout('./components/layouts/Main.tsx', [

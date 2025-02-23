@@ -27,7 +27,7 @@ const WorkoutEdit = ({ loaderData }: Route.ComponentProps) => {
 
 	return (
 		<div className="container">
-			{/* <Editor content={loaderData.data?.description as string} /> */}
+			<Editor content={loaderData.data?.description as string} />
 		</div>
 	)
 }
