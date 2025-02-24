@@ -1,7 +1,7 @@
 import { randomUUID } from "crypto";
 import { saveWorkout, WorkoutType } from "./repo/workout";
 import { ScrapperService } from "./scrap-service";
-import prisma from "service/prisma";
+import prisma from "./service/prisma";
 //@ts-ignore
 
 
@@ -58,31 +58,37 @@ export const getWorkOfTheDayData = async (year: number, month: string) => {
 	// });
 
 
-	scrapperService.closeBrowser()
-	return {}
 
 }
 
-export const getManyWorkOfTheDayData = async (to: { month: string, year: number }[]) => {
-	const allData = await Promise.all(
-		to.map(async ({ month, year }) => {
-			return await getWorkOfTheDayData(year, month);
-		})
-	);
-	console.log('allData', allData)
-	Promise.all(allData.map(data => {
+export const getManyWorkOfTheDayData = async (to: { month: string; year: number }[]) => {
+	for (const { month, year } of to) {
+		const data = await getWorkOfTheDayData(year, month);
 
-		prisma.
-	}));
+		for (const c of data) {
+			const images = c.rawlinks as { text: string; href: string }[];
 
-	// const workouts = allData.flat().map((c) => ({
-	// 	year: c.year,
-	// 	month: Number(c.month),
-	// 	image: c.image ?? null,
-	// 	day: `${c.title}-${randomUUID()}`,
-	// 	data: c,
-	// }));
-	// console.log('workouts', workouts)
-
-	// await Promise.all(workouts.map(saveWorkout));
+			await prisma.wod.create({
+				data: {
+					createdByUser: false,
+					uuid: randomUUID(),
+					title: c.title,
+					description: c.description,
+					beginnerOption: c.beginner,
+					resources: c.recourses,
+					intermediateOption: c.intermediate,
+					coachComments: c.coaching,
+					scaling: c.scaling,
+					strategy: c.strategy,
+					thumbnail: c.image,
+					images: {
+						create: images.map((i) => ({
+							image: { create: { name: i.text, type: "url", url: i.href } },
+						})),
+					},
+				},
+			});
+		}
+	}
 };
+

@@ -227,7 +227,7 @@ export class ScrapperService {
 				return Array.from(workoutBlocks).map((block) => {
 					const imgElement = block.querySelector('img');
 					const paragraphs = block.querySelectorAll('p');
-
+					const title = block.querySelector('h3 a')?.textContent?.trim() || '';
 					const image = imgElement ? imgElement.getAttribute('src') : null;
 
 					// Массив для сохранения контента
@@ -238,13 +238,7 @@ export class ScrapperService {
 					Array.from(paragraphs).forEach((p) => {
 						const textContent = p.textContent?.trim() || '';
 
-						// Прекращаем обработку, как только находим "Stimulus and Strategy"
-						if (textContent.includes('Stimulus and Strategy')) {
-							isStimulusSection = true;
-							return; // Прекращаем обработку текущего параграфа
-						}
 
-						// Фильтруем ненужные параграфы
 						if (
 							textContent.includes("Rest Day") ||
 							textContent.includes('Find a gym near you:') ||
@@ -263,31 +257,20 @@ export class ScrapperService {
 						let beginner = '';
 						let coaching = '';
 
-						if (!isStimulusSection) {
-							if (textContent.includes('Post time to comments')) {
-								return
-							}
-							workout = textContent; // Если это обычный параграф для тренировки
-						} else {
-							// Если это раздел "Stimulus and Strategy", сохраняем стратегию
-							strategy = textContent.replace('Stimulus and Strategy', '').trim();
-						}
 
-						// Обработка различных разделов
+
 						if (textContent.includes('Scaling')) {
-							scaling = textContent.replace('Scaling', '').trim();
-						}
-						if (textContent.includes('Intermediate option')) {
-							intermediate = textContent.replace('Intermediate option', '').trim();
-						}
-						if (textContent.includes('Beginner option')) {
-							beginner = textContent.replace('Beginner option', '').trim();
-						}
-						if (textContent.includes('Coaching cues')) {
-							coaching = textContent.replace('Coaching cues', '').trim();
-						}
-						if (textContent.includes('Stimulus and Strategy')) {
-							strategy = textContent.replace('Stimulus and Strategy', '').trim();
+							scaling += textContent.replace('Scaling:', '').trim();
+						} else if (textContent.includes('Intermediate option')) {
+							intermediate += textContent.replace('Intermediate option:', '').trim();
+						} else if (textContent.includes('Beginner option')) {
+							beginner += textContent.replace('Beginner option:', '').trim();
+						} else if (textContent.includes('Coaching cues')) {
+							coaching += textContent.replace('Coaching cues:', '').trim();
+						} else if (textContent.includes('Stimulus and Strategy')) {
+							strategy += textContent.replace('Stimulus and Strategy:', '').trim();
+						} else {
+							workout += textContent + '\n'; // Всё остальное добавляем в workout
 						}
 
 						extractedContent.push({
@@ -307,13 +290,16 @@ export class ScrapperService {
 					// Объединяем все данные в один объект
 					const combinedContent = {
 						image,
+						title: title,
 						workout: '',
 						scaling: '',
 						intermediate: '',
 						beginner: '',
 						coaching: "",
+						description: '',
 						strategy: '',
 						recourses: [],
+						rawlinks: [],
 					};
 					//@ts-ignore
 					extractedContent.forEach((item) => {
@@ -325,6 +311,8 @@ export class ScrapperService {
 							if (item.beginner) combinedContent.beginner += `### Beginner Option\n${item.beginner}\n\n`;
 							if (item.strategy) combinedContent.strategy += `### Stimulus and Strategy\n${item.strategy}\n\n`;
 							//@ts-ignore
+							combinedContent.rawlinks.push(...item.recourses);
+							//@ts-ignore
 							item.recourses.forEach((link) => {
 								//@ts-ignore
 								combinedContent.recourses.push(`[${link.text}](${link.href})`);
@@ -332,6 +320,7 @@ export class ScrapperService {
 						}
 					});
 
+					console.log('combinedContent', combinedContent)
 					return combinedContent;
 				});
 			});
