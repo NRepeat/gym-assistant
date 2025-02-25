@@ -176,7 +176,7 @@ model WodMovement {
 
 model WodMovementBaseInfo {
   id          Int            @id @default(autoincrement())
-  name        String         @unique
+  name        String?        @unique
   description String
   image       Media[]
   equipment   WodEquipment[]

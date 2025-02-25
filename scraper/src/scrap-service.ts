@@ -53,7 +53,9 @@ export class ScrapperService {
 			// }]
 		});
 		const page = await context.newPage();
-		await page.goto(url);
+		console.log('url1', url)
+		await page.goto(url, { timeout: 50000 });
+		console.log('url', url)
 
 		return page;
 	}
@@ -70,99 +72,179 @@ export class ScrapperService {
 	async getHeroWorkoutData() {
 		try {
 			const page = await this.getPage('https://www.crossfit.com/heroes');
+			console.log('page');
 			const selector = '#main';
-			const d = await page.$(selector);
-			console.log('d', d)
-			console.log('d', d)
-			const data = await page.$eval(selector, (div) => {
-				const workoutBlocks = div.querySelectorAll('._component_1ugao_79');
-				return Array.from(workoutBlocks).map((block) => {
-					const titleElement = block.querySelector('h3');
-					const imgElement = block.querySelector('img');
-					const paragraphs = block.querySelectorAll('p');
-					const title = titleElement ? titleElement.textContent?.trim() : null;
-					const image = imgElement ? imgElement.getAttribute('src') : null;
-					const extractedContent = Array.from(paragraphs).map((p) => {
-						const strong = p.querySelector('strong');
-						const linksInP = p.querySelectorAll('a');
-						const textContent = p.textContent?.trim() || '';
-						if (textContent.includes('Find a gym near you:') || textContent.includes('2024 Open Registration is LIVE!')) return null;
-						return {
-							type: strong ? 'title' : 'text',
-							content: textContent,
-							links: Array.from(linksInP).map((a) => ({
-								text: a.textContent?.trim() || '',
-								href: a.getAttribute('href') || '',
-							})),
-						};
+			await page.waitForSelector(selector);
+			await page.waitForSelector('._component_1ugao_79');
 
-					});
-					return {
-						type: 'hero-workout',
-						image,
-						title,
-						content: extractedContent.filter((p) => p !== null),
+			const d = page.locator("._component_1ugao_79");
+			const divsContent = await d.evaluateAll((divs) => {
+				return divs.map((div) => {
+					const titleElement = div.querySelector('h3');
+					const imgElement = div.querySelector('img');
+					const paragraphs = Array.from(div.querySelectorAll('p'));
+
+					const title = titleElement?.textContent?.trim() || null;
+					const image = imgElement?.getAttribute('src') || null;
+					const skipTexts = ['Find a gym near you:', '2024 Open Registration is LIVE!', 'First posted'];
+
+					let extractedContent: string[] = [];
+					let betweenH3AndImgP: string[] = [];
+					let collecting = false;
+					const stripTags = (html: string) => {
+						const doc = new DOMParser().parseFromString(html, 'text/html');
+						return doc.body.textContent || "";
 					};
+					// Процесс обхода всех <p> элементов
+					for (const p of paragraphs) {
+						const textContent = p.textContent?.trim();
+						if (!textContent || skipTexts.some(skipText => textContent.includes(skipText))) continue;
 
-				})
+						// If <p> contains the image, stop collecting text for between title and image
+						if (p.contains(imgElement)) collecting = false;
 
-			})
-			console.log('data', data)
-			return data
+						// If collecting, add to betweenH3AndImgP
+						if (collecting) {
+							betweenH3AndImgP.push(stripTags(p.outerHTML));
+						}
 
+						// If title is before <p>, start collecting text
+						if (titleElement && p.previousElementSibling === titleElement) collecting = true;
+
+						// Add the stripped text content to extractedContent
+						extractedContent.push(stripTags(textContent));
+					}
+
+					// Убираем текст из betweenH3AndImgP, который также присутствует в extractedContent
+					const filteredExtractedContent = extractedContent.filter(content =>
+						!betweenH3AndImgP.some(p => p.includes(content))
+					);
+
+					// Convert to Markdown format (for simplicity, converting to just plain text with newlines)
+					const markdownContent = filteredExtractedContent.join('\n\n');
+					const markdownBetweenH3AndImgP = betweenH3AndImgP.join('\n\n');
+					return {
+						title,
+						image,
+						workout: markdownContent,
+						description: markdownBetweenH3AndImgP,
+					};
+				});
+			});
+
+			// console.log('divsContent', divsContent);
+			// this.closeBrowser();
+			return divsContent;
 		} catch (error) {
 			console.error('Ошибка:', error);
 			throw new Error(`${error}`);
-
 		}
 	}
+
 	async getOpenWorkoutData({ year, month }: { year: number, month: number }) {
 		try {
-			const page = await this.getPage(`https://games.crossfit.com/workouts/semifinals/${year}/${month}`);
+			const page = await this.getPage(`https://games.crossfit.com/workouts/open/${year}/${month}`);
 
 			const selector = '#workouts';
 			await page.waitForSelector(selector);
 
 
 			await page.waitForSelector('.exercises')
-			const exercisesData = await page.$eval('.exercises', (div => {
+			const exercisesData = await page.$eval('.exercises', (div) => {
 				const ps = div.querySelectorAll('p');
-				return Array.from(ps).map((p) => {
+				let workoutData = '';
+				let isFirstParagraph = true; // Флаг для пропуска отступа в первом параграфе
+				Array.from(ps).forEach((p) => {
 					const textContent = p.textContent?.trim() || '';
-					return {
-						type: 'p',
-						content: textContent,
-					};
-				}
-				)
-			}))
+					if (textContent) {
+						// Пропускаем первый параграф
+						if (isFirstParagraph) {
+							isFirstParagraph = false;
+							workoutData += `${textContent}\n`; // Не добавляем маркер списка для первого параграфа
+							return;
+						}
+
+						// Если в параграфе есть <br>, разбиваем текст на строки
+						const lines = p.innerHTML.split('<br>').map((line) => line.trim());
+						lines.forEach((line) => {
+							if (line) {
+								// Если линия не пустая, добавляем маркер списка
+								workoutData += `- ${line}\n`;
+							}
+						});
+					}
+				});
+				return workoutData;
+			});
+
+
+
+
 			// await page.waitForSelector('.pdf-link');
 			// const pdfLink = await page.$eval('.pdf-link', (div) => {
 			// 	const a = div.querySelector('a');
 			// 	return a?.getAttribute('href') || '';
 			// });
-			await page.waitForSelector('#workoutDescription')
+
+			await page.waitForSelector('#workoutDescription');
 			const workoutDescriptionData = await page.$eval('#workoutDescription', (div) => {
-				const divs = div.querySelectorAll('div');
-				return Array.from(divs).map((div) => {
-					const divDat = Array.from(div.childNodes).map((node) => {
-						if (node.nodeName === 'H2') {
-							return {
-								type: 'title',
-								content: node.textContent?.trim() || '',
-							};
-						}
-						if (node.nodeName === 'P') {
-							return {
-								type: 'text',
-								content: node.textContent?.trim() || '',
-							};
-						}
-						return null;
-					}).filter(Boolean);
-					return divDat;
-				})
-			})
+				function getMarkdown(node: HTMLElement, seenParagraphs: Set<string>): string {
+					const tag = node.tagName.toLowerCase();
+					const text = node.textContent?.trim() || '';
+					console.log('text', text)
+
+					if (!text) return '';
+
+					const skippedHeaders = new Set([
+						"ADAPTIVE DIVISIONS",
+						"FOUNDATIONS",
+						"YOUR SCORE",
+						"DOWNLOAD YOUR SCORECARD"
+					]);
+
+					if (skippedHeaders.has(text.toUpperCase())) return '';
+
+					if (tag === 'h1') return `# ${text}\n`;
+					if (tag === 'h2') return `## ${text}\n`;
+					if (tag === 'h3') return `### ${text}\n`;
+					if (tag === 'h4') return `#### ${text}\n`;
+					if (tag === 'h5') return `##### ${text}\n`;
+					if (tag === 'h6') return `###### ${text}\n`;
+
+					if (tag === 'p' || tag === 'li') {
+						if (seenParagraphs.has(text)) return '';
+						seenParagraphs.add(text);
+						return text;
+					}
+
+					if (tag === 'ul' || tag === 'ol') {
+						return `\n${Array.from(node.children)
+							.map((li, i) => {
+								const itemText = getMarkdown(li as HTMLElement, seenParagraphs);
+								if (!itemText) return ''; // Пропускаем пустые строки
+								return tag === 'ul' ? `- ${itemText}` : `${i + 1}. ${itemText}`;
+							})
+							.filter(Boolean)
+							.join('\n')}\n`;
+					}
+
+					return text;
+				}
+				const seenParagraphs = new Set<string>();
+				console.log('seenParagraphs', seenParagraphs)
+
+				return Array.from(div.querySelectorAll('div')).map((innerDiv) => {
+					return Array.from(innerDiv.childNodes)
+						.map((node) => {
+							if (node.nodeType === Node.ELEMENT_NODE) {
+								return getMarkdown(node as HTMLElement, seenParagraphs);
+							}
+						})
+						.filter(Boolean)
+						.join(' ');
+				}).join('\n');
+			});
+
 
 
 			const inactiveTab = page.locator('.tabs .tab:not(.active) a');
@@ -187,7 +269,7 @@ export class ScrapperService {
 
 				return { items, thumbnails };
 			});
-			const content = { workout: exercisesData, pdfLink: '', workoutDescriptionData, moveStandards }
+			const content = { workout: exercisesData, title: `${month}-${year}`, pdfLink: '', workoutDescriptionData, moveStandards }
 			// this.closeBrowser();
 			return { content }
 		} catch (error) {
