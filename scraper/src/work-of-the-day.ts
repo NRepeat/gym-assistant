@@ -64,7 +64,8 @@ export const getWorkOfTheDayData = async (year: number, month: string) => {
 export const getManyWorkOfTheDayData = async (to: { month: string; year: number }[]) => {
 	for (const { month, year } of to) {
 		const data = await getWorkOfTheDayData(year, month);
-
+		let max = to.length
+		let count = 0
 		for (const c of data) {
 			const images = c.rawlinks as { text: string; href: string }[];
 
@@ -78,6 +79,7 @@ export const getManyWorkOfTheDayData = async (to: { month: string; year: number 
 					resources: c.recourses,
 					intermediateOption: c.intermediate,
 					coachComments: c.coaching,
+					workout: c.workout,
 					scaling: c.scaling,
 					strategy: c.strategy,
 					thumbnail: c.image,
@@ -88,7 +90,10 @@ export const getManyWorkOfTheDayData = async (to: { month: string; year: number 
 					},
 				},
 			});
+			count++
+			console.log('Left %', (count / max) * 100)
 		}
+
 	}
 };
 

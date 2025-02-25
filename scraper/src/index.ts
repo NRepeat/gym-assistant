@@ -9,22 +9,22 @@ import fs, { writeFileSync } from "fs";
 (async () => {
 	const to = [];
 
-	// for (let year = 2021; year <= 2024; year++) {
-	// 	for (let month = 1; month <= 12; month++) {
-	// 		to.push({
-	// 			month: month.toString().padStart(2, '0'),
-	// 			year: year
-	// 		});
-	// 	}
-	// }
-	// to.push({
-	// 	month: '01',
-	// 	year: 2025
-	// });
+	for (let year = 2021; year <= 2024; year++) {
+		for (let month = 1; month <= 12; month++) {
+			to.push({
+				month: month.toString().padStart(2, '0'),
+				year: year
+			});
+		}
+	}
 	to.push({
-		month: '02',
+		month: '01',
 		year: 2025
 	});
+	// to.push({
+	// 	month: '02',
+	// 	year: 2025
+	// });
 	console.log('to:', to);
 	await getManyWorkOfTheDayData(to)
 	// const newS = new ScrapperService()

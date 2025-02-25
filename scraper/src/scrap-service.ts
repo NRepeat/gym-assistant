@@ -257,7 +257,24 @@ export class ScrapperService {
 						let beginner = '';
 						let coaching = '';
 
-
+						if (!textContent.includes('Scaling') && !textContent.includes('Intermediate option') && !textContent.includes('Beginner option') && !textContent.includes('Coaching cues') && !textContent.includes('Stimulus and Strategy') && !textContent.includes('Resources:')) {
+							if (textContent.includes("Compare to")) {
+								return
+							}
+							if (textContent.includes("Post time to comments.")) {
+								return
+							}
+							if (textContent.includes('Post rounds completed to comments')) {
+								return;
+							}
+							if (textContent.includes('Post reps to comments')) {
+								return
+							}
+							if (textContent.includes('comments')) {
+								return
+							}
+							workout += textContent;
+						}
 
 						if (textContent.includes('Scaling')) {
 							scaling += textContent.replace('Scaling:', '').trim();
@@ -269,8 +286,6 @@ export class ScrapperService {
 							coaching += textContent.replace('Coaching cues:', '').trim();
 						} else if (textContent.includes('Stimulus and Strategy')) {
 							strategy += textContent.replace('Stimulus and Strategy:', '').trim();
-						} else {
-							workout += textContent + '\n'; // Всё остальное добавляем в workout
 						}
 
 						extractedContent.push({
@@ -320,7 +335,6 @@ export class ScrapperService {
 						}
 					});
 
-					console.log('combinedContent', combinedContent)
 					return combinedContent;
 				});
 			});
@@ -328,7 +342,6 @@ export class ScrapperService {
 
 
 			this.closeBrowser();
-			console.log('data', data)
 			return data;
 		} catch (error) {
 			console.error('Ошибка:', error);
