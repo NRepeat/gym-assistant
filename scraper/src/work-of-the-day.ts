@@ -62,10 +62,13 @@ export const getWorkOfTheDayData = async (year: number, month: string) => {
 }
 
 export const getManyWorkOfTheDayData = async (to: { month: string; year: number }[]) => {
+
+	let max = to.length
+	let count = 0
 	for (const { month, year } of to) {
 		const data = await getWorkOfTheDayData(year, month);
-		let max = to.length
-		let count = 0
+		console.log('data', data)
+
 		for (const c of data) {
 			const images = c.rawlinks as { text: string; href: string }[];
 
@@ -90,9 +93,9 @@ export const getManyWorkOfTheDayData = async (to: { month: string; year: number 
 					},
 				},
 			});
-			count++
-			console.log('Left %', (count / max) * 100)
 		}
+		count++
+		console.log('Left %', (count / max) * 100)
 
 	}
 };

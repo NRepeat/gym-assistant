@@ -122,6 +122,7 @@ model Wod {
   workout            String?
   intermediateOption String?
   beginnerOption     String?
+  hero               Boolean       @default(false)
   coachComments      String?
   resources          Json?
   createdByUser      Boolean
