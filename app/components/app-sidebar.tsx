@@ -44,30 +44,14 @@ const data = {
       icon: Dumbbell,
       isActive: true,
       items: [
-        {
-          title: "Opens",
-          url: "/admin/workout/opens",
-        },
-        {
-          title: "Heroes",
-          url: "/admin/workout/heroes",
-        },
-        {
-          title: "Semifinals",
-          url: "/admin/workout/semifinals",
-        },
-        {
-          title: 'Workout',
-          url: '/admin/workout/workout',
-        }
+
       ],
     },
     {
       title: "Media",
-      url: "#",
+      url: "/admin/media",
       icon: Image,
       items: [
-
       ],
     },
     {
@@ -77,18 +61,6 @@ const data = {
       items: [
         {
           title: "Introduction",
-          url: "#",
-        },
-        {
-          title: "Get Started",
-          url: "#",
-        },
-        {
-          title: "Tutorials",
-          url: "#",
-        },
-        {
-          title: "Changelog",
           url: "#",
         },
       ],
@@ -102,7 +74,6 @@ const data = {
           title: "Account",
           url: "#",
         },
-
       ],
     },
   ],
@@ -113,22 +84,6 @@ const data = {
       icon: Database,
       isActive: false,
       items: [
-        {
-          title: "Amrap",
-          url: "/admin/data/workouts/amrap",
-        },
-        {
-          title: "Heroes",
-          url: "/admin/data/workouts/emom",
-        },
-        {
-          title: "Semifinals",
-          url: "/admin/data/workouts/tabata",
-        },
-        {
-          title: 'Workout',
-          url: '/admin/data/workouts/FOR-TIME',
-        },
 
       ],
     },

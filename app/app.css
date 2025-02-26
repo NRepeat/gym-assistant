@@ -169,6 +169,11 @@ body {
 }
 
 @layer components {
+  .table-header   thead, tr {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+}
   .AccordionContent {
     overflow: hidden;
   }
@@ -178,6 +183,7 @@ body {
   .AccordionContent[data-state="closed"] {
     animation: slideUp 300ms ease-out;
   }
+  
   .text-flip{
     position: absolute;
     bottom: 0;

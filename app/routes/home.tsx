@@ -1,4 +1,3 @@
-import { ZoneCardService } from "~/service/zone-card-service.server";
 import type { Route } from "./+types/home";
 import { Link } from "react-router";
 import { Card, CardContent, CardFooter, CardHeader } from "~/components/ui/card";
@@ -14,21 +13,21 @@ export function meta({ }: Route.MetaArgs) {
 
 export async function loader({ request }: Route.LoaderArgs) {
   try {
-    const cardsData = await ZoneCardService.getZoneCardData()
+    // const cardsData = await ZoneCardService.getZoneCardData()
 
-    return { cardsData }
+    return {}
   } catch (error) {
     throw new Response("Error while fetching zone card data", { status: 500 });
   }
 }
 
 export default function Home({ loaderData }: Route.ComponentProps) {
-  const { cardsData } = loaderData
+  // const { cardsData } = loaderData
 
 
   return (
     <div className="grid grid-cols-2 grid-rows-2 gap-4">
-      <HomeCard data={cardsData[0]} link={cardsData[0].link} className="col-span-2" />
+      {/* <HomeCard data={cardsData[0]} link={cardsData[0].link} className="col-span-2" /> */}
     </div>
   )
 }

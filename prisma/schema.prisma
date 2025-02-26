@@ -13,70 +13,70 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model WorkoutData {
-  id Int @id @default(autoincrement())
+// model WorkoutData {
+//   id Int @id @default(autoincrement())
 
-  day       String   @unique
-  month     Int
-  year      Int
-  image     String?
-  data      Json
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
+//   day       String   @unique
+//   month     Int
+//   year      Int
+//   image     String?
+//   data      Json
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt
+// }
 
-model Heroes {
-  id          Int        @id @default(autoincrement())
-  name        String
-  description Json
-  workout     Json
-  movement    Movement[] @relation("HeroMovements")
-  image       String[]
-  thumbnails  String[]
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
-}
+// model Heroes {
+//   id          Int        @id @default(autoincrement())
+//   name        String
+//   description Json
+//   workout     Json
+//   movement    Movement[] @relation("HeroMovements")
+//   image       String[]
+//   thumbnails  String[]
+//   createdAt   DateTime   @default(now())
+//   updatedAt   DateTime   @updatedAt
+// }
 
-model Opens {
-  id          Int        @id @default(autoincrement())
-  year        Int
-  open        Int
-  workout     Json
-  pdf         String
-  description Json
-  thumbnails  String[]
-  movement    Movement[] @relation("OpenMovements")
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
-}
+// model Opens {
+//   id          Int        @id @default(autoincrement())
+//   year        Int
+//   open        Int
+//   workout     Json
+//   pdf         String
+//   description Json
+//   thumbnails  String[]
+//   movement    Movement[] @relation("OpenMovements")
+//   createdAt   DateTime   @default(now())
+//   updatedAt   DateTime   @updatedAt
+// }
 
-model Semifinals {
-  id          Int        @id @default(autoincrement())
-  year        Int
-  semifinal   Int
-  workout     Json
-  pdf         String
-  description Json
-  thumbnails  String[]
-  movement    Movement[] @relation("SemifinalMovements")
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
-}
+// model Semifinals {
+//   id          Int        @id @default(autoincrement())
+//   year        Int
+//   semifinal   Int
+//   workout     Json
+//   pdf         String
+//   description Json
+//   thumbnails  String[]
+//   movement    Movement[] @relation("SemifinalMovements")
+//   createdAt   DateTime   @default(now())
+//   updatedAt   DateTime   @updatedAt
+// }
 
-model Movement {
-  id          Int      @id @default(autoincrement())
-  name        String   @unique
-  description String
-  year        Int?
-  workout     Int?
-  image       String[]
+// model Movement {
+//   id          Int      @id @default(autoincrement())
+//   name        String   @unique
+//   description String
+//   year        Int?
+//   workout     Int?
+//   image       String[]
 
-  createdAt  DateTime     @default(now())
-  updatedAt  DateTime     @updatedAt
-  heroes     Heroes[]     @relation("HeroMovements")
-  opens      Opens[]      @relation("OpenMovements")
-  semifinals Semifinals[] @relation("SemifinalMovements")
-}
+//   createdAt  DateTime     @default(now())
+//   updatedAt  DateTime     @updatedAt
+//   heroes     Heroes[]     @relation("HeroMovements")
+//   opens      Opens[]      @relation("OpenMovements")
+//   semifinals Semifinals[] @relation("SemifinalMovements")
+// }
 
 model User {
   id        Int              @id @default(autoincrement())
@@ -111,19 +111,22 @@ model WorkoutSession {
 
 model Wod {
   id                 Int           @id @default(autoincrement())
-  type               WodType       @relation(fields: [typeId], references: [id])
-  typeId             Int           @unique
+  type               WodType?      @relation(fields: [typeId], references: [id])
+  typeId             Int?          @unique
   description        String?
   uuid               String        @unique
   strategy           String?
   scaling            String?
+  title              String?
+  thumbnail          String?
+  workout            String?
   intermediateOption String?
   beginnerOption     String?
+  hero               Boolean       @default(false)
   coachComments      String?
-  resources          String[]
+  resources          Json?
   createdByUser      Boolean
-  images             WodImage      @relation(fields: [imagesId], references: [id])
-  imagesId           Int
+  images             WodImage[]
   createdAt          DateTime      @default(now())
   updatedAt          DateTime      @updatedAt
   movement           WodMovement[]
@@ -141,9 +144,11 @@ model Media {
 }
 
 model WodImage {
-  id        Int      @id @default(autoincrement())
-  image     Media[]
-  wod       Wod[]
+  id    Int     @id @default(autoincrement())
+  image Media[]
+
+  wod       Wod?     @relation(fields: [wodId], references: [id])
+  wodId     Int?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -171,7 +176,7 @@ model WodMovement {
 
 model WodMovementBaseInfo {
   id          Int            @id @default(autoincrement())
-  name        String         @unique
+  name        String?        @unique
   description String
   image       Media[]
   equipment   WodEquipment[]
